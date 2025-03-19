@@ -1,43 +1,44 @@
 'use client';
 
-import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { FilterOption } from '@/app/page';
-import { cn } from '@/lib/utils';
-import { BookOpenText, Flag } from 'lucide-react';
-
-const filters: { label: string; value: FilterOption }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Books', value: 'book' },
-  { label: 'Signage', value: 'signage' },
-  { label: 'Featured', value: 'featured' },
-  { label: 'Recent', value: 'recent' },
-];
 
 export default function ProjectFilter() {
-  const router = useRouter();
   const searchParams = useSearchParams();
-  const currentFilter = (searchParams.get('filter') as FilterOption) || 'all';
+  const pathname = usePathname();
+  const { replace } = useRouter();
+  const currentFilter = searchParams.get('filter') || 'all';
 
-  const handleFilterChange = (filter: FilterOption) => {
-    router.push(`/?filter=${filter}`);
-  };
+  function handleFilter(filter: FilterOption) {
+    const params = new URLSearchParams(searchParams);
+    if (filter === 'all') {
+      params.delete('filter');
+    } else {
+      params.set('filter', filter);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
 
   return (
-    <div className="flex gap-4 justify-end">
-      {filters.map(({ label, value }) => (
-        <button
-          key={value}
-          onClick={() => handleFilterChange(value)}
-          className={`px-4 py-2 rounded-full transition-colors duration-200 ${
-            currentFilter === value
-              ? 'bg-black text-white'
-              : 'hover:bg-black/10'
-          }`}
-        >
-          {label}
-        </button>
-      ))}
+    <div className="flex gap-4 justify-center text-white/70">
+      <button
+        onClick={() => handleFilter('all')}
+        className={`hover:text-white transition-colors duration-200 ${currentFilter === 'all' ? 'text-white' : ''}`}
+      >
+        ⬜ All
+      </button>
+      <button
+        onClick={() => handleFilter('book')}
+        className={`hover:text-white transition-colors duration-200 ${currentFilter === 'book' ? 'text-white' : ''}`}
+      >
+        📖 Books
+      </button>
+      <button
+        onClick={() => handleFilter('signage')}
+        className={`hover:text-white transition-colors duration-200 ${currentFilter === 'signage' ? 'text-white' : ''}`}
+      >
+        🏷️ Signage
+      </button>
     </div>
   );
 } 

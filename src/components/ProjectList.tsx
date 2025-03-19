@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getFilteredProjects } from '@/lib/sanity';
-import { urlFor } from '@/lib/sanity';
 
 interface Project {
   _id: string;
@@ -14,18 +13,17 @@ interface Project {
   type: 'book' | 'signage';
   featured: boolean;
   publishedAt: string;
-  backgroundColor: string;
-  mainImage?: {
-    asset: {
-      _ref: string;
-      _type: 'reference';
-    };
-  };
 }
 
 interface ProjectListProps {
   initialProjects: Project[];
 }
+
+const TypeIcon = ({ type }: { type: 'book' | 'signage' }) => (
+  <span className="inline-block mr-2">
+    {type === 'book' ? '📖' : '🏷️'}
+  </span>
+);
 
 export default function ProjectList({ initialProjects }: ProjectListProps) {
   const [projects, setProjects] = useState(initialProjects);
@@ -53,7 +51,7 @@ export default function ProjectList({ initialProjects }: ProjectListProps) {
 
   return (
     <motion.div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+      className="text-white/70 space-y-4 text-xl"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -61,26 +59,19 @@ export default function ProjectList({ initialProjects }: ProjectListProps) {
       {projects.map((project, index) => (
         <motion.div
           key={project._id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: isLoading ? 0 : 1, y: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.1 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: isLoading ? 0 : 1, x: 0 }}
+          transition={{ duration: 0.3, delay: index * 0.05 }}
+          className="flex items-center"
         >
+          <TypeIcon type={project.type} />
           <Link
             href={`/projects/${project.slug}`}
-            className="group block relative aspect-[3/4] overflow-hidden"
+            className="hover:text-white transition-colors duration-200"
           >
-            {project.mainImage && (
-              <img
-                src={urlFor(project.mainImage).width(800).url()}
-                alt={project.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-            )}
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-500" />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-              <h2 className="text-white text-2xl font-light">{project.title}</h2>
-            </div>
+            {project.title}
           </Link>
+          {index < projects.length - 1 && <span className="mx-2">,</span>}
         </motion.div>
       ))}
     </motion.div>
