@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,100..1000;1,100..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans+Mono:wght@100..500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --foreground-rgb: 0, 0, 0;
+    --background-rgb: 255, 255, 255;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01", "ss03", "cv01", "cv03";
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-normal tracking-tight leading-normal;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-white/50;
+  }
+}
+
+@layer components {
+  .project-item {
+    @apply relative transition-colors duration-300 ease-in-out;
+  }
+
+  .project-item:hover {
+    @apply text-white;
+  }
+
+  .project-hover-image {
+    @apply pointer-events-none z-50 max-w-md max-h-80 object-cover rounded-sm overflow-hidden;
+    transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-item {
+    @apply relative cursor-pointer hover:text-white transition-colors duration-200;
+  }
+
+  .nav-item.active {
+    @apply text-white;
+  }
+
+  .filters button {
+    @apply hover:text-white transition-colors duration-200;
+  }
+
+  .filters button.active {
+    @apply text-white;
+  }
+}
+
+/* Project item animations */
+@keyframes project-item-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add this to your existing keyframes */
+@keyframes project-item-shuffle {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.85;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 1s ease-out forwards;
+} 
