@@ -52,6 +52,9 @@ export async function getFilteredProjects(filter: string) {
     query += ` && type == "${filter}"`
   }
 
+  // Add deduplication by slug
+  query += ' | unique(slug.current)'
+
   return client.fetch(`${query} | order(title asc) {
     _id,
     title,
