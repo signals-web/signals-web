@@ -7,12 +7,12 @@
 
 @layer base {
   :root {
-    --foreground-rgb: 0, 0, 0;
-    --background-rgb: 255, 255, 255;
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 220, 38, 38;
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-red-600 text-white/70 antialiased min-h-screen;
     font-feature-settings: "ss01", "ss03", "cv01", "cv03";
     font-family: 'DM Sans', sans-serif;
   }
