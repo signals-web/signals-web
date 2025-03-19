@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import ProjectFilter from '@/components/ProjectFilter';
@@ -6,7 +6,7 @@ import ProjectList from '@/components/ProjectList';
 import PageTransition from '@/components/PageTransition';
 import { getProjects } from '@/lib/sanity';
 
-export type FilterOption = 'all' | 'architecture' | 'art' | 'development' | 'featured' | 'recent';
+export type FilterOption = 'all' | 'book' | 'signage' | 'featured' | 'recent';
 
 export default async function Home() {
   const projects = await getProjects();
@@ -29,7 +29,7 @@ export default async function Home() {
                 />
               </Link>
               <nav className="flex gap-8">
-                <Link href="/projects/experimental" className="hover:text-black/70 transition-colors duration-200">All Projects</Link>
+                <Link href="/" className="hover:text-black/70 transition-colors duration-200">All Projects</Link>
                 <Link href="/about" className="hover:text-black/70 transition-colors duration-200">About</Link>
                 <Link href="/about" className="hover:text-black/70 transition-colors duration-200">Contact</Link>
               </nav>
@@ -61,7 +61,7 @@ export default async function Home() {
               />
             </Link>
             <nav className="flex gap-8">
-              <Link href="/projects/experimental" className="hover:text-black/70 transition-colors duration-200">All Projects</Link>
+              <Link href="/" className="hover:text-black/70 transition-colors duration-200">All Projects</Link>
               <Link href="/about" className="hover:text-black/70 transition-colors duration-200">About</Link>
               <Link href="/about" className="hover:text-black/70 transition-colors duration-200">Contact</Link>
             </nav>
@@ -69,8 +69,12 @@ export default async function Home() {
 
           <PageTransition>
             <div className="space-y-12">
-              <ProjectFilter />
-              <ProjectList initialProjects={projects} />
+              <Suspense fallback={<div>Loading filters...</div>}>
+                <ProjectFilter />
+              </Suspense>
+              <Suspense fallback={<div>Loading projects...</div>}>
+                <ProjectList initialProjects={projects} />
+              </Suspense>
             </div>
           </PageTransition>
         </div>
